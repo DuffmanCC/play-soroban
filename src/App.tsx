@@ -3,6 +3,7 @@ import Soroban from "soroban-react-component"
 import "soroban-react-component/style"
 import packageJson from "../package.json"
 import AnimatedModal from "./components/AnimateModal"
+import Bead from "./components/Bead"
 import Card from "./components/Card"
 import Config from "./components/Config"
 import Countdown from "./components/Countdown"
@@ -48,8 +49,8 @@ export function App() {
           <MdBarChart className="size-8 text-muted-foreground" />
         </button>
 
-        <h1 className="text-center text-3xl font-bold text-muted-foreground uppercase">
-          Play Soroban
+        <h1 className="flex items-center justify-center gap-2 text-2xl font-bold text-muted-foreground uppercase">
+          <Bead className="size-8" /> Play Soroban
         </h1>
 
         <button
@@ -126,8 +127,8 @@ export function App() {
         onClose={() => setShowStats(false)}
         bounce
       >
-        <Card>
-          <Stats />
+        <Card className="min-h-0">
+          <Stats onClose={() => setShowStats(false)} />
         </Card>
       </AnimatedModal>
 

@@ -20,7 +20,7 @@ export default function Config({ setConfig, config, onClose }: ConfigProps) {
         onClose()
       }}
     >
-      <h2 className="mb-4 text-center text-3xl font-bold">Settings</h2>
+      <h2 className="mb-4 text-center text-2xl font-bold">Settings</h2>
 
       {Object.entries(config).map(([key, value]) => {
         const field = CONFIG_FIELDS[key]
@@ -46,7 +46,9 @@ export default function Config({ setConfig, config, onClose }: ConfigProps) {
                 />
               </div>
 
-              <span className="text-xs text-muted-foreground">{value}</span>
+              <span className="relative -top-1 text-xs text-muted-foreground">
+                {value} {field.label === "Speed" && "ms"}
+              </span>
             </label>
           )
         }

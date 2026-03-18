@@ -1,0 +1,19 @@
+# Verificar la rama actual
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+if [ "$current_branch" != "main" ]; then
+  echo "Not on main branch, skipping tests."
+  exit 0
+fi
+
+echo "Executing tests..."
+
+# Ejecuta el test y captura el resultado
+npx vitest run --run --passWithNoTests > test-results.log 2>&1
+
+if grep -q "FAIL" test-results.log; then
+  echo "❌ Some tests fail. Check test-results.log"
+  exit 1
+else
+  echo "✅ Tests successful."
+fi

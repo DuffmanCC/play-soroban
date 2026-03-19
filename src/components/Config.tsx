@@ -1,4 +1,5 @@
 import Input from "@/components/Input"
+import { useTheme } from "@/components/theme-provider"
 import { Switch } from "@/components/ui/switch"
 import { CONFIG_FIELDS } from "../tools/constants"
 import type { Config } from "../types"
@@ -12,6 +13,8 @@ interface ConfigProps {
 }
 
 export default function Config({ setConfig, config, onClose }: ConfigProps) {
+  const { theme, setTheme } = useTheme()
+
   return (
     <form
       className="flex flex-col justify-center gap-2"
@@ -74,7 +77,7 @@ export default function Config({ setConfig, config, onClose }: ConfigProps) {
           )
         }
 
-        if (field.type === "switch") {
+        if (field.type === "switch" && field.label !== "Dark mode") {
           return (
             <label key={key} className="flex items-center justify-between">
               <span className="font-semibold">{field.label}</span>
@@ -86,7 +89,15 @@ export default function Config({ setConfig, config, onClose }: ConfigProps) {
           )
         }
 
-        return null
+        return (
+          <label key={key} className="flex items-center justify-between">
+            <span className="font-semibold">{field.label}</span>
+            <Switch
+              checked={theme === "dark"}
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            />
+          </label>
+        )
       })}
 
       <Button type="submit">Done</Button>

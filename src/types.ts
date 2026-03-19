@@ -6,6 +6,8 @@ export type Config = {
   includeZero: boolean
   showSoroban: boolean
   showSequence: boolean
+  darkMode: boolean
+  sounds: boolean
 }
 
 export type ConfigFields = {

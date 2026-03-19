@@ -13,6 +13,8 @@ export const DEFAULT_CONFIG: Config = {
   includeZero: false,
   showSoroban: true,
   showSequence: false,
+  darkMode: false,
+  sounds: true,
 }
 
 export const CONFIG_FIELDS: ConfigFields = {
@@ -55,15 +57,23 @@ export const CONFIG_FIELDS: ConfigFields = {
     type: "input",
   },
   includeZero: {
-    label: "Include zero?",
+    label: "Include zero",
     type: "switch",
   },
   showSoroban: {
-    label: "Show soroban?",
+    label: "Show soroban",
     type: "switch",
   },
   showSequence: {
-    label: "Show sequence?",
+    label: "Show sequence",
+    type: "switch",
+  },
+  darkMode: {
+    label: "Dark mode",
+    type: "switch",
+  },
+  sounds: {
+    label: "Sounds",
     type: "switch",
   },
 }

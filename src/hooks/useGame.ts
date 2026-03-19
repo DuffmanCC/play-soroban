@@ -1,14 +1,14 @@
+import { COUNTDOWN_DURATION, OPACITY_DURATION } from "@/tools/constants"
+import { playTick, randomNumber } from "@/tools/helpers"
+import type { Config } from "@/types"
 import { useEffect, useRef, useState } from "react"
-import { COUNTDOWN_DURATION, OPACITY_DURATION } from "../tools/constants"
-import { randomNumber } from "../tools/helpers"
-import type { Config } from "../types"
 
 export function useGame(config: Config) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [arr, setArr] = useState<number[]>([])
   const [round, setRound] = useState(0)
-  const [showResult, setShowResult] = useState(false)
   const [opacity, setOpacity] = useState(true)
+  const [showResult, setShowResult] = useState(false)
   const [showConfig, setShowConfig] = useState(false)
   const [showStats, setShowStats] = useState(false)
   const [myResult, setMyResult] = useState<number | null>(null)
@@ -16,7 +16,6 @@ export function useGame(config: Config) {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const countdownRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const isFinished = round === config.numberOfRounds
   const showCountdown = isPlaying && round === 0
 
   const result = arr.reduce((acc, curr) => acc + curr, 0)
@@ -32,43 +31,38 @@ export function useGame(config: Config) {
     if (countdownRef.current) clearTimeout(countdownRef.current)
   }
 
-  function addGameToHistory() {
-    const gameHistory = JSON.parse(
-      localStorage.getItem("gameHistory") || "[]"
-    ) as { date: string; result: number }[]
-
-    gameHistory.push({
-      date: new Date().toISOString(),
-      result,
-    })
-
-    localStorage.setItem("gameHistory", JSON.stringify(gameHistory))
+  type GameEntry = {
+    date: string
+    result: boolean
   }
 
-  function addGameToSession() {
-    const gameSession = JSON.parse(
-      sessionStorage.getItem("gameSession") || "[]"
-    ) as { date: string; result: number }[]
+  function addGame(storage: Storage, myResult: number) {
+    const data = JSON.parse(
+      storage.getItem("gameHistory") || "[]"
+    ) as GameEntry[]
 
-    gameSession.push({
+    data.push({
       date: new Date().toISOString(),
-      result,
+      result: result === myResult,
     })
 
-    sessionStorage.setItem("gameSession", JSON.stringify(gameSession))
+    storage.setItem("gameHistory", JSON.stringify(data))
   }
 
   function handleCheckResult(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
 
-    const form = e.currentTarget
-    const input = form.elements.namedItem("result") as HTMLInputElement | null
-    const value = input?.value
+    const input = e.currentTarget.elements.namedItem(
+      "result"
+    ) as HTMLInputElement | null
+    const parsed = Number(input?.value)
 
-    setMyResult(value ? Number(value) : null)
+    if (Number.isNaN(parsed)) return
+
+    setMyResult(parsed)
     setShowResult(true)
-    addGameToHistory()
-    addGameToSession()
+    addGame(localStorage, parsed)
+    addGame(sessionStorage, parsed)
   }
 
   useEffect(() => {
@@ -85,9 +79,25 @@ export function useGame(config: Config) {
       setArr([firstRand])
       setRound(1)
 
+      if (config.sounds) {
+        playTick({
+          frequency: 600,
+          duration: 0.05,
+          volume: 1,
+        })
+      }
+
       // Interval for remaining rounds
       intervalRef.current = setInterval(() => {
         setOpacity(false)
+
+        if (config.sounds) {
+          playTick({
+            frequency: 600,
+            duration: 0.05,
+            volume: 1,
+          })
+        }
 
         setTimeout(() => {
           setArr((prevArr) => {
@@ -132,6 +142,7 @@ export function useGame(config: Config) {
     config.includeZero,
     config.speed,
     config.numberOfRounds,
+    config.sounds,
   ])
 
   return {
@@ -140,22 +151,18 @@ export function useGame(config: Config) {
     arr,
     round,
     result,
-    showResult,
-    isFinished,
     opacity,
     reset,
-    setShowResult,
     showCountdown,
     showSoroban: config.showSoroban,
     showConfig,
-    setShowConfig,
-    addGameToHistory,
-    addGameToSession,
     showStats,
-    setShowStats,
-    setMyResult,
-    myResult,
     showSequence: config.showSequence,
+    showResult,
+    setShowResult,
+    setShowConfig,
+    setShowStats,
+    myResult,
     handleCheckResult,
   }
 }

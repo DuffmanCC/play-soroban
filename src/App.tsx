@@ -1,17 +1,17 @@
+import AnimatedModal from "@/components/AnimateModal"
+import Bead from "@/components/Bead"
+import Card from "@/components/Card"
+import Config from "@/components/Config"
+import Countdown from "@/components/Countdown"
+import Stats from "@/components/Stats"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { useConfig } from "@/hooks/useConfig"
+import { useGame } from "@/hooks/useGame"
 import { MdBarChart, MdCheck, MdSettings } from "react-icons/md"
 import Soroban from "soroban-react-component"
 import "soroban-react-component/style"
 import packageJson from "../package.json"
-import AnimatedModal from "./components/AnimateModal"
-import Bead from "./components/Bead"
-import Card from "./components/Card"
-import Config from "./components/Config"
-import Countdown from "./components/Countdown"
-import Stats from "./components/Stats"
-import { Button } from "./components/ui/button"
-import { Input } from "./components/ui/input"
-import { useConfig } from "./hooks/useConfig"
-import { useGame } from "./hooks/useGame"
 import { COUNTDOWN_DURATION, SOROBAN_COLUMNS } from "./tools/constants"
 
 export function App() {
@@ -25,17 +25,17 @@ export function App() {
     result,
     opacity,
     reset,
-    setShowResult,
     showCountdown,
     showSoroban,
     showConfig,
-    setShowConfig,
     showStats,
-    setShowStats,
     showSequence,
+    showResult,
+    setShowResult,
+    setShowConfig,
+    setShowStats,
     myResult,
     handleCheckResult,
-    showResult,
   } = useGame(config)
 
   return (
@@ -76,18 +76,18 @@ export function App() {
           {arr[round - 1] >= 0 ? `+${arr[round - 1]}` : arr[round - 1]}
         </p>
 
-        <AnimatedModal
-          open={showResult}
-          onClose={() => setShowResult(false)}
-          bounce
-        >
+        <AnimatedModal open={showResult} bounce>
           <Card className="h-100">
-            {!myResult ? (
+            {myResult == null ? (
               <form
                 className="flex flex-col items-center gap-4"
                 onSubmit={handleCheckResult}
                 data-testid="result-modal"
               >
+                <h2 className="mb-4 text-center text-2xl font-bold">
+                  Check result
+                </h2>
+
                 <Input className="w-20 text-center" name="result" />
                 <Button type="submit">Check Result</Button>
               </form>
@@ -146,7 +146,9 @@ export function App() {
         </Card>
       </AnimatedModal>
 
-      {showCountdown && <Countdown init={COUNTDOWN_DURATION} />}
+      {showCountdown && (
+        <Countdown init={COUNTDOWN_DURATION} sounds={config.sounds} />
+      )}
 
       <footer className="flex w-full flex-col gap-2">
         {showSequence && (

@@ -3,7 +3,7 @@ import { type ReactNode } from "react"
 
 type AnimatedModalProps = {
   open: boolean
-  onClose: () => void
+  onClose?: () => void
   children: ReactNode
   bounce?: boolean
 }

@@ -5,27 +5,27 @@ import { useEffect, useRef, useState } from "react"
 
 export function useGame(config: Config) {
   const [isPlaying, setIsPlaying] = useState(false)
-  const [arr, setArr] = useState<number[]>([])
-  const [round, setRound] = useState(0)
+  const [numbers, setNumbers] = useState<number[]>([])
   const [opacity, setOpacity] = useState(true)
   const [showResult, setShowResult] = useState(false)
   const [showConfig, setShowConfig] = useState(false)
   const [showStats, setShowStats] = useState(false)
-  const [myResult, setMyResult] = useState<number | null>(null)
+  const [myResult, setMyResult] = useState("")
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const countdownRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  const round = numbers.length
   const showCountdown = isPlaying && round === 0
-
-  const result = arr.reduce((acc, curr) => acc + curr, 0)
+  const result = numbers.reduce((acc, curr) => acc + curr, 0)
+  const currentValue =
+    numbers[round - 1] >= 0 ? `+${numbers[round - 1]}` : numbers[round - 1]
 
   function reset() {
     setIsPlaying(false)
-    setArr([])
-    setRound(0)
+    setNumbers([])
     setShowResult(false)
-    setMyResult(null)
+    setMyResult("")
 
     if (intervalRef.current) clearInterval(intervalRef.current)
     if (countdownRef.current) clearTimeout(countdownRef.current)
@@ -36,14 +36,14 @@ export function useGame(config: Config) {
     result: boolean
   }
 
-  function addGame(storage: Storage, myResult: number) {
+  function addGame(storage: Storage, myResult: string) {
     const data = JSON.parse(
       storage.getItem("gameHistory") || "[]"
     ) as GameEntry[]
 
     data.push({
       date: new Date().toISOString(),
-      result: result === myResult,
+      result: result.toString() === myResult,
     })
 
     storage.setItem("gameHistory", JSON.stringify(data))
@@ -55,14 +55,15 @@ export function useGame(config: Config) {
     const input = e.currentTarget.elements.namedItem(
       "result"
     ) as HTMLInputElement | null
-    const parsed = Number(input?.value)
 
-    if (Number.isNaN(parsed)) return
+    const value = input?.value
 
-    setMyResult(parsed)
+    if (!value) return
+
+    setMyResult(value)
     setShowResult(true)
-    addGame(localStorage, parsed)
-    addGame(sessionStorage, parsed)
+    addGame(localStorage, value)
+    addGame(sessionStorage, value)
   }
 
   useEffect(() => {
@@ -76,8 +77,7 @@ export function useGame(config: Config) {
         config.limitMax,
         config.includeZero
       )
-      setArr([firstRand])
-      setRound(1)
+      setNumbers([firstRand])
 
       if (config.sounds) {
         playTick({
@@ -100,7 +100,7 @@ export function useGame(config: Config) {
         }
 
         setTimeout(() => {
-          setArr((prevArr) => {
+          setNumbers((prevArr) => {
             const sumPrev = prevArr.reduce((a, b) => a + b, 0)
 
             const rand = randomNumber(
@@ -110,7 +110,6 @@ export function useGame(config: Config) {
             )
 
             const nextArr = [...prevArr, rand]
-            setRound(nextArr.length)
 
             // Stop interval if finished
             if (
@@ -148,7 +147,7 @@ export function useGame(config: Config) {
   return {
     isPlaying,
     setIsPlaying,
-    arr,
+    numbers,
     round,
     result,
     opacity,
@@ -164,5 +163,6 @@ export function useGame(config: Config) {
     setShowStats,
     myResult,
     handleCheckResult,
+    currentValue,
   }
 }

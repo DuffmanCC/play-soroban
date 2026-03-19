@@ -108,7 +108,7 @@ describe("Play Soroban", () => {
     }
 
     // Ahora el modal debería estar visible
-    const modal = screen.getByTestId("result-modal")
+    const modal = screen.getByTestId("result-form")
     expect(modal).toBeVisible()
 
     vi.useRealTimers()

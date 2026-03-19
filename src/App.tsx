@@ -20,7 +20,7 @@ export function App() {
   const {
     isPlaying,
     setIsPlaying,
-    arr,
+    numbers,
     round,
     result,
     opacity,
@@ -36,6 +36,7 @@ export function App() {
     setShowStats,
     myResult,
     handleCheckResult,
+    currentValue,
   } = useGame(config)
 
   return (
@@ -63,26 +64,26 @@ export function App() {
       </header>
 
       <main className="relative flex grow flex-col items-center gap-8">
-        {!!round && (
-          <p className="h-8 text-2xl">{round ? "Round: " + round : ""}</p>
-        )}
-
         <p
-          className={`flex grow items-center leading-none transition-opacity duration-75 ${
+          className={`flex h-40 grow items-center text-9xl leading-none transition-opacity duration-75 ${
             opacity ? "opacity-100" : "opacity-0"
-          } ${showSoroban ? "h-40 text-[9rem]" : "h-56 text-[13rem]"}`}
+          }`}
           data-testid="number"
         >
-          {arr[round - 1] >= 0 ? `+${arr[round - 1]}` : arr[round - 1]}
+          {currentValue}
+        </p>
+
+        <p className="h-8 text-base font-semibold text-muted-foreground">
+          {round > 0 && "Round: " + round}
         </p>
 
         <AnimatedModal open={showResult} bounce>
           <Card className="h-100">
-            {myResult == null ? (
+            {!myResult ? (
               <form
                 className="flex flex-col items-center gap-4"
                 onSubmit={handleCheckResult}
-                data-testid="result-modal"
+                data-testid="result-form"
               >
                 <h2 className="mb-4 text-center text-2xl font-bold">
                   Check result
@@ -100,7 +101,7 @@ export function App() {
                   reset()
                 }}
               >
-                {result === myResult ? (
+                {result.toString() === myResult ? (
                   <MdCheck className="text-5xl text-green-500" />
                 ) : (
                   <div className="text-2xl">Fail! result was {result}</div>
@@ -153,7 +154,7 @@ export function App() {
       <footer className="flex w-full flex-col gap-2">
         {showSequence && (
           <div className="w-full overflow-x-auto rounded-lg bg-primary/20 px-4 py-2 text-center font-mono text-foreground">
-            {JSON.stringify(arr)}
+            {JSON.stringify(numbers)}
           </div>
         )}
 

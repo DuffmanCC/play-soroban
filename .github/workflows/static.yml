@@ -31,9 +31,7 @@ jobs:
         run: corepack enable && corepack prepare pnpm@latest --activate
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Lint
+        run: pnpm install --frozen-lockfile --ignore-scripts
         run: pnpm lint
 
   test:
@@ -52,9 +50,7 @@ jobs:
         run: corepack enable && corepack prepare pnpm@latest --activate
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Test
+        run: pnpm install --frozen-lockfile --ignore-scripts
         run: pnpm test
 
   build:
@@ -73,9 +69,7 @@ jobs:
         run: corepack enable && corepack prepare pnpm@latest --activate
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build project
+        run: pnpm install --frozen-lockfile --ignore-scripts
         run: pnpm run build
 
       - name: Upload artifact

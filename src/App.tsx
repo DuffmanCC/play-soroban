@@ -3,6 +3,7 @@ import Bead from "@/components/Bead"
 import Card from "@/components/Card"
 import Config from "@/components/Config"
 import Countdown from "@/components/Countdown"
+import SplashScreen from "@/components/SplashScreen"
 import Stats from "@/components/Stats"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -41,6 +42,7 @@ export function App() {
 
   return (
     <>
+      <SplashScreen />
       <header className="flex w-full justify-between">
         <button
           onClick={() => setShowStats((prev) => !prev)}

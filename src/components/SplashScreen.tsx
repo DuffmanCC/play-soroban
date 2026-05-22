@@ -20,8 +20,8 @@ export default function SplashScreen() {
           transition={{ duration: 0.4 }}
         >
           <motion.div
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
+            initial={{ scale: 0, rotate: 0 }}
+            animate={{ scale: 1, rotate: 1080 }}
             transition={{
               type: "spring",
               stiffness: 200,

@@ -30,10 +30,11 @@ jobs:
       - name: Setup pnpm
         run: corepack enable && corepack prepare pnpm@latest --activate
 
+      - name: Setup pnpm config
+        run: echo "minimumReleaseAge=0" >> .npmrc
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        env:
-          PNPM_MINIMUM_RELEASE_AGE: "0"
 
       - name: Lint
         run: pnpm lint
@@ -53,10 +54,11 @@ jobs:
       - name: Setup pnpm
         run: corepack enable && corepack prepare pnpm@latest --activate
 
+      - name: Setup pnpm config
+        run: echo "minimumReleaseAge=0" >> .npmrc
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        env:
-          PNPM_MINIMUM_RELEASE_AGE: "0"
 
       - name: Test
         run: pnpm test
@@ -76,10 +78,11 @@ jobs:
       - name: Setup pnpm
         run: corepack enable && corepack prepare pnpm@latest --activate
 
+      - name: Setup pnpm config
+        run: echo "minimumReleaseAge=0" >> .npmrc
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        env:
-          PNPM_MINIMUM_RELEASE_AGE: "0"
 
       - name: Build project
         run: pnpm run build

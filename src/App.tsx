@@ -96,7 +96,7 @@ export function App() {
               <form
                 className="flex flex-col items-center justify-center gap-4"
                 onSubmit={(e) => {
-                  e.preventDefault
+                  e.preventDefault()
                   setShowResult(false)
                   reset()
                 }}

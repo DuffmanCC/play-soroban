@@ -43,7 +43,7 @@ export default function Countdown({
       document.body.classList.remove("overflow-hidden")
       clearInterval(id)
     }
-  }, [sounds])
+  }, [countdown, sounds])
 
   return (
     <div

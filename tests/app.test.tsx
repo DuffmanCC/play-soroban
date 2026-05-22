@@ -45,7 +45,7 @@ describe("Play Soroban", () => {
     fireEvent.click(startButton)
 
     // Comprobamos que el countdown está presente inicialmente
-    let countdown = screen.getByTestId("countdown")
+    const countdown = screen.getByTestId("countdown")
     expect(countdown).toBeInTheDocument()
 
     // Avanzamos los timers 3 segundos
@@ -66,7 +66,7 @@ describe("Play Soroban", () => {
     fireEvent.click(startButton)
 
     // Comprobamos que el countdown está presente inicialmente
-    let countdown = screen.getByTestId("countdown")
+    const countdown = screen.getByTestId("countdown")
     expect(countdown).toBeInTheDocument()
 
     // Avanzamos los timers 3 segundos
